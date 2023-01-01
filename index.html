@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Request Animation Frame </title>
+    <style>
+
+        *{padding: 0; margin: 0; box-sizing: border-box;}
+
+        body{ padding: 5px; width: 100vw; height: 100vh; }
+
+        main{
+            position: relative;
+            background-image: linear-gradient(to top, lightgreen, green);
+            display: grid;
+            place-items: center;
+            height: 100%;
+        }
+        .obj{
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            outline: 3px solid #2234;
+            outline-offset: 3px;
+            background-color: gold;
+            cursor: pointer;
+            position: absolute;
+            left: 10px;
+            top: 25px;
+        }
+
+        button{
+            width: 100px;
+            height: 25px;
+            cursor: pointer;
+            color: #fff;
+            font-weight: 700;
+            border: none;
+        }
+        button:hover{ border: 1px solid;}
+
+        button:nth-child(1){ background-color: olive;}
+        button:nth-child(2){ background-color: blue;}
+        button:nth-child(3){ background-color: teal;}
+    </style>
+</head>
+<body>
+    
+<main>
+    <div class="obj" id="obj"></div>
+    <div class="btn">
+        <button id="start">START</button>
+        <button id="pause">PAUSE</button>
+        <button id="restart">RESTART</button>
+    </div>
+</main>
+
+<script>
+
+let px
+let py
+let dx 
+let dy 
+let vel
+let anima 
+let obj 
+let estado
+
+function starting(){
+
+  if(!estado){
+    px=10
+    py=0
+    dx=1
+    dy=0
+    vel=1
+    estado=1
+    obj=document.getElementById('obj')
+    obj.style.backgroundColor='#00f'
+    obj.addEventListener('click', movePause)
+    game()
+    document.getElementById('restart').addEventListener('click', restarting)
+    document.getElementById('pause').addEventListener('click', pausing)
+  }  
+}
+
+function movePause(){
+    if(estado){
+        estado=0
+        obj.style.backgroundColor='#f00'
+        cancelAnimationFrame(anima)
+    } else{
+        estado=1
+        obj.style.backgroundColor='#00f'
+        anima=requestAnimationFrame(game)
+    }
+}
+
+function pausing(){
+        estado=0
+        obj.style.backgroundColor='#f00'
+        cancelAnimationFrame(anima)
+}
+
+function restarting(){
+    if(!estado){
+        estado=1
+        obj.style.backgroundColor='#00f'
+        anima=requestAnimationFrame(game)
+    }      
+}
+
+function game(){
+    px+=(dx*vel)
+    obj.style.left=px+'px'
+
+    if(px>1295){dx=-1}
+    else if(px<10) {dx=1}
+
+    anima=requestAnimationFrame(game)
+}
+
+document.getElementById('start').addEventListener('click', starting)
+
+</script>
+</body>
+</html>
